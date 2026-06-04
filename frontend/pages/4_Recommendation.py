@@ -1,9 +1,6 @@
 """
 Page 4: Drone Recommendation — review DSS results, confirm or override.
 """
-import sys, os
-sys.path.insert(0, os.path.dirname(__file__))
-
 import streamlit as st
 import requests
 import pandas as pd
