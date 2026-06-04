@@ -30,3 +30,8 @@ Thumbs.db
 
 # PyMuPDF
 *.so
+
+# AI assistant source bundle / scratch (the integrated module lives in frontend/pages/)
+ai bot .zip
+ai_bot_extracted/
+dss_assistant_side_panel_mockup.html

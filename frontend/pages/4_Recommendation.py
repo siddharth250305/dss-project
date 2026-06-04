@@ -5,6 +5,7 @@ import streamlit as st
 import requests
 import pandas as pd
 import plotly.graph_objects as go
+from ai_assistant import render_ai_assistant
 
 st.set_page_config(page_title="Recommendation — Drone DSS", page_icon="🏆", layout="wide")
 
@@ -180,3 +181,34 @@ if log_id and rec:
             st.info("No alternative drones available to override with.")
 elif not rec:
     st.info("No recommendation to confirm or override.")
+
+# ── Floating AI Assistant ──
+if rec:
+    decision_result = {
+        "mission_id": mission_id,
+        "recommended_drone": rec.get("drone_name"),
+        "recommended_score": rec.get("total_score"),
+        "drones_passed": len(ranked),
+        "drones_rejected": len(rejected),
+        "score_breakdown": rec.get("breakdown", {}),
+        "ranked_drones": [
+            {"name": r["drone_name"], "score": r["total_score"]}
+            for r in ranked
+        ],
+        "rejected_drones": [
+            {
+                "name": r["drone_name"],
+                "reason": ", ".join(reason["message"] for reason in r.get("reasons", [])),
+            }
+            for r in rejected
+        ],
+        "safety_alerts": [
+            {"severity": "Critical" if "Critical" in a else "Warning", "message": a}
+            for a in alerts
+        ],
+        "was_overridden": False,
+    }
+else:
+    decision_result = None
+
+render_ai_assistant(recommendation_data=decision_result)
